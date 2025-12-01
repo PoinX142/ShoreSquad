@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShoreSquad - Rally your crew, track weather, and hit the next beach cleanup!">
+    <meta name="theme-color" content="#0066CC">
+    <title>ShoreSquad - Beach Cleanup Mobilization</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%230066CC'>🌊</text></svg>">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <div class="logo-section">
+                    <h1 class="logo">
+                        <span class="emoji" role="img" aria-label="wave">🌊</span>
+                        ShoreSquad
+                    </h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#events" class="nav-link">Events</a></li>
+                    <li><a href="#weather" class="nav-link">Weather</a></li>
+                    <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+                </ul>
+                <button class="menu-toggle" aria-label="Toggle navigation menu">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero" role="main">
+            <div class="container hero-content">
+                <h2>Rally Your Crew. Clean Our Beaches.</h2>
+                <p class="tagline">Track weather, find events, and make beach cleanup social & fun!</p>
+                <button class="cta-button" id="exploreBttn" aria-label="Explore upcoming beach cleanup events">
+                    Explore Events
+                </button>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="events-section" role="region" aria-label="Upcoming cleanup events">
+            <div class="container">
+                <h2>Upcoming Cleanups</h2>
+                <div class="search-bar">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search by beach name or location..."
+                        aria-label="Search beach locations"
+                        class="search-input"
+                    >
+                    <button class="search-btn" aria-label="Search events">🔍</button>
+                </div>
+                <div class="events-container" id="eventsContainer" role="list">
+                    <!-- Events will be dynamically loaded here -->
+                    <div class="loading" aria-live="polite">Loading events...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weather Section -->
+        <section id="weather" class="weather-section" role="region" aria-label="Beach weather forecast">
+            <div class="container">
+                <h2>Beach Weather Today</h2>
+                <button class="geo-button" id="geoBtn" aria-label="Get weather for your current location">
+                    📍 Use My Location
+                </button>
+                <div class="weather-container" id="weatherContainer">
+                    <!-- Weather will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard" class="leaderboard-section" role="region" aria-label="Top beach cleanup crews">
+            <div class="container">
+                <h2>Crew Leaderboard</h2>
+                <div class="leaderboard" id="leaderboard" role="list" aria-label="Ranked cleanup crews">
+                    <!-- Leaderboard will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Call-to-Action Section -->
+        <section class="cta-section" role="region" aria-label="Join ShoreSquad">
+            <div class="container">
+                <h2>Ready to Make a Difference?</h2>
+                <p>Join thousands of young people cleaning beaches and connecting with their community.</p>
+                <button class="cta-button secondary" id="joinBtn" aria-label="Join ShoreSquad community">
+                    Join the Movement
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <p>&copy; 2025 ShoreSquad. Making beaches cleaner, one crew at a time.</p>
+            <ul class="footer-links">
+                <li><a href="#privacy" aria-label="Privacy Policy">Privacy</a></li>
+                <li><a href="#terms" aria-label="Terms of Service">Terms</a></li>
+                <li><a href="#contact" aria-label="Contact us">Contact</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Modal for Event Details -->
+    <div id="eventModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <button class="close-modal" aria-label="Close event details modal">&times;</button>
+            <h3 id="modalTitle">Event Details</h3>
+            <div id="modalBody"></div>
+            <button class="cta-button" id="joinEventBtn">Join Event</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
