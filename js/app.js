@@ -307,7 +307,7 @@ function handleGeolocation() {
     
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            const { latitude, latitude, longitude } = position.coords;
+            const { latitude, longitude } = position.coords;
             // Load weather for user's location
             loadWeather({ name: 'Your Location', lat: latitude, lng: longitude });
         },
