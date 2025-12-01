@@ -5,7 +5,8 @@
 
 // ===== STATE & CONFIG =====
 const APP_CONFIG = {
-    apiWeatherUrl: 'https://api.open-meteo.com/v1/forecast',
+    neaWeatherUrl: 'https://api.data.gov.sg/v1/environment/air-temperature',
+    neaForecastUrl: 'https://api.data.gov.sg/v1/environment/2-hour-weather-forecast',
     beachLocations: [
         { id: 1, name: 'Marina Bay Beach', lat: 1.2855, lng: 103.8565, region: 'Singapore' },
         { id: 2, name: 'East Coast Beach', lat: 1.3021, lng: 103.9684, region: 'Singapore' },
@@ -134,7 +135,9 @@ function attachEventListeners() {
     });
     
     // Geolocation
-    elements.geoBtn?.addEventListener('click', handleGeolocation);
+    elements.geoBtn?.addEventListener('click', () => {
+        alert('📍 NEA Weather API provides real-time data for Singapore. Your location data is used for reference only.\n\nCurrent data: All Singapore beaches');
+    });
     
     // Modal handling
     elements.closeModal?.addEventListener('click', closeEventModal);
@@ -249,80 +252,81 @@ function handleSearch() {
 
 // ===== WEATHER FUNCTIONALITY =====
 function loadWeather(location) {
-    // Using Open-Meteo API (free, no key needed)
-    fetch(`${APP_CONFIG.apiWeatherUrl}?latitude=${location.lat}&longitude=${location.lng}&current=temperature_2m,weather_code,wind_speed_10m`)
+    // Fetch from NEA's 2-hour weather forecast API
+    fetch(APP_CONFIG.neaForecastUrl)
         .then(response => response.json())
         .then(data => {
-            const current = data.current;
-            const weatherCard = createWeatherCard(location, current);
+            const forecasts = data.items[0].forecasts;
+            const weatherCards = createWeatherForecast(forecasts);
             elements.weatherContainer.innerHTML = '';
-            elements.weatherContainer.appendChild(weatherCard);
+            elements.weatherContainer.appendChild(weatherCards);
         })
         .catch(error => {
             console.error('Weather fetch error:', error);
-            elements.weatherContainer.innerHTML = '<p class="loading">Unable to load weather. Please try again later.</p>';
+            elements.weatherContainer.innerHTML = '<p class="loading">Unable to load weather forecast. Please try again later.</p>';
         });
 }
 
-function createWeatherCard(location, weatherData) {
-    const card = document.createElement('div');
-    card.className = 'weather-card';
+function createWeatherForecast(forecasts) {
+    const container = document.createElement('div');
+    container.className = 'weather-forecast-grid';
     
-    const weatherIcon = getWeatherIcon(weatherData.weather_code);
-    const condition = getWeatherCondition(weatherData.weather_code);
+    // Group forecasts by day (8 entries per day, every 30 minutes = 4 hours of data)
+    const dailyForecasts = {};
     
-    card.innerHTML = `
-        <h3>${escapeHtml(location.name)}</h3>
-        <div class="weather-icon">${weatherIcon}</div>
-        <div class="weather-temp">${Math.round(weatherData.temperature_2m)}°C</div>
-        <div class="weather-condition">${condition}</div>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">Wind: ${weatherData.wind_speed_10m} m/s</p>
-    `;
-    
-    return card;
-}
-
-function getWeatherIcon(code) {
-    // WMO Weather interpretation codes
-    if (code === 0) return '☀️';
-    if (code === 1 || code === 2) return '⛅';
-    if (code === 3) return '☁️';
-    if (code === 45 || code === 48) return '🌫️';
-    if (code >= 51 && code <= 67) return '🌧️';
-    if (code >= 71 && code <= 77) return '❄️';
-    if (code >= 80 && code <= 82) return '⛈️';
-    return '🌤️';
-}
-
-function getWeatherCondition(code) {
-    if (code === 0) return 'Clear sky';
-    if (code === 1 || code === 2) return 'Partly cloudy';
-    if (code === 3) return 'Overcast';
-    if (code === 45 || code === 48) return 'Foggy';
-    if (code >= 51 && code <= 67) return 'Rainy';
-    if (code >= 71 && code <= 77) return 'Snowy';
-    if (code >= 80 && code <= 82) return 'Showers';
-    return 'Unknown';
-}
-
-// ===== GEOLOCATION =====
-function handleGeolocation() {
-    if (!navigator.geolocation) {
-        alert('Geolocation is not supported by your browser.');
-        return;
-    }
-    
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const { latitude, longitude } = position.coords;
-            // Load weather for user's location
-            loadWeather({ name: 'Your Location', lat: latitude, lng: longitude });
-        },
-        (error) => {
-            console.error('Geolocation error:', error);
-            alert('Could not access your location. Please check permissions.');
+    forecasts.forEach((forecast, index) => {
+        const forecastTime = new Date(forecast.timestamp);
+        const dayKey = forecastTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        if (!dailyForecasts[dayKey]) {
+            dailyForecasts[dayKey] = [];
         }
-    );
+        dailyForecasts[dayKey].push(forecast);
+    });
+    
+    // Create cards for each day (show first forecast of each unique day)
+    const dayKeys = Object.keys(dailyForecasts).slice(0, 4); // Show up to 4 days
+    
+    dayKeys.forEach((day, index) => {
+        const forecastArray = dailyForecasts[day];
+        // Use the most frequent condition for the day
+        const forecast = forecastArray[Math.floor(forecastArray.length / 2)];
+        
+        const card = document.createElement('div');
+        card.className = 'weather-forecast-card';
+        
+        const weatherIcon = getWeatherIconFromCondition(forecast.forecast);
+        const forecastTime = new Date(forecast.timestamp);
+        const dayName = forecastTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        
+        card.innerHTML = `
+            <div class="forecast-day">${dayName}</div>
+            <div class="forecast-icon">${weatherIcon}</div>
+            <div class="forecast-condition">${escapeHtml(forecast.forecast)}</div>
+            <div class="forecast-info">
+                <p>📍 ${forecastArray.length} readings available</p>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+    
+    return container;
+}
+
+function getWeatherIconFromCondition(condition) {
+    const conditionLower = condition.toLowerCase();
+    
+    if (conditionLower.includes('clear')) return '☀️';
+    if (conditionLower.includes('partly cloudy')) return '⛅';
+    if (conditionLower.includes('cloudy') || conditionLower.includes('overcast')) return '☁️';
+    if (conditionLower.includes('rainy') || conditionLower.includes('rain')) return '🌧️';
+    if (conditionLower.includes('thundery')) return '⛈️';
+    if (conditionLower.includes('snow')) return '❄️';
+    if (conditionLower.includes('fog') || conditionLower.includes('mist')) return '🌫️';
+    if (conditionLower.includes('haze')) return '💨';
+    
+    return '🌤️';
 }
 
 // ===== LEADERBOARD =====

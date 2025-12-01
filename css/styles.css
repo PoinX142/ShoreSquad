@@ -520,6 +520,58 @@ section {
     opacity: 0.9;
 }
 
+/* === WEATHER FORECAST GRID === */
+.weather-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.weather-forecast-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.weather-forecast-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 102, 204, 0.2);
+}
+
+.forecast-day {
+    font-weight: 600;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-icon {
+    font-size: 2.5rem;
+    margin: 0.75rem 0;
+}
+
+.forecast-condition {
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    line-height: 1.3;
+}
+
+.forecast-info {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 0.75rem;
+}
+
+.forecast-info p {
+    margin: 0.3rem 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 /* === LEADERBOARD === */
 .leaderboard {
     list-style: none;
