@@ -218,6 +218,85 @@ section {
     margin-bottom: 2rem;
 }
 
+/* === MAP SECTION === */
+.map-section {
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.map-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+}
+
+.leaflet-container {
+    background: #e1e5e9;
+    font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: var(--border-radius);
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.beach-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border: 3px solid white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.map-popup {
+    padding: 0.5rem 0;
+}
+
+.map-popup h4 {
+    margin: 0.5rem 0;
+    color: var(--primary-color);
+}
+
+.map-popup p {
+    margin: 0.3rem 0;
+    font-size: 0.85rem;
+}
+
+.map-popup-btn {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: var(--transition);
+}
+
+.map-popup-btn:hover {
+    background-color: var(--dark-color);
+}
+
 /* === SEARCH BAR === */
 .search-bar {
     display: flex;
@@ -658,6 +737,10 @@ a:focus {
     .modal-content {
         width: 95%;
         margin: 20% auto;
+    }
+    
+    .map-container {
+        height: 300px;
     }
 }
 

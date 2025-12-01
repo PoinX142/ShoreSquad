@@ -101,6 +101,7 @@ function initializeApp() {
     loadEvents(SAMPLE_EVENTS);
     loadWeather(APP_CONFIG.beachLocations[0]);
     loadLeaderboard();
+    initializeMap();
     
     // Attach event listeners
     attachEventListeners();
@@ -340,6 +341,52 @@ function loadLeaderboard() {
         `;
         
         elements.leaderboard.appendChild(item);
+    });
+}
+
+// ===== MAP INITIALIZATION =====
+let map;
+function initializeMap() {
+    // Create map centered on Singapore
+    map = L.map('map').setView([1.3521, 103.8198], 11);
+    
+    // Add tile layer from OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19,
+        className: 'map-tiles'
+    }).addTo(map);
+    
+    // Add beach location markers
+    APP_CONFIG.beachLocations.forEach(beach => {
+        const marker = L.circleMarker([beach.lat, beach.lng], {
+            radius: 12,
+            fillColor: '#0066CC',
+            color: 'white',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.9,
+            className: 'beach-marker'
+        }).addTo(map);
+        
+        // Add popup with beach info
+        marker.bindPopup(`
+            <div class="map-popup">
+                <h4>🌊 ${escapeHtml(beach.name)}</h4>
+                <p><strong>Region:</strong> ${escapeHtml(beach.region)}</p>
+                <p><strong>Coordinates:</strong> ${beach.lat.toFixed(4)}, ${beach.lng.toFixed(4)}</p>
+                <button class="map-popup-btn" onclick="smoothScroll('#events')">View Events</button>
+            </div>
+        `).on('click', function() {
+            this.openPopup();
+        });
+    });
+    
+    // Handle map resize
+    window.addEventListener('resize', () => {
+        if (map) {
+            map.invalidateSize();
+        }
     });
 }
 

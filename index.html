@@ -12,6 +12,9 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 </head>
 <body>
     <!-- Header -->
@@ -45,6 +48,14 @@
                 <button class="cta-button" id="exploreBttn" aria-label="Explore upcoming beach cleanup events">
                     Explore Events
                 </button>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section id="map-section" class="map-section" role="region" aria-label="Beach cleanup locations map">
+            <div class="container">
+                <h2>Beach Locations Map</h2>
+                <div id="map" class="map-container"></div>
             </div>
         </section>
 
@@ -126,6 +137,9 @@
         </div>
     </div>
 
+    <!-- Leaflet Map JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
     <!-- JavaScript -->
     <script src="js/app.js"></script>
 </body>
