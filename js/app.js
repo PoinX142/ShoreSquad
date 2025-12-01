@@ -81,6 +81,7 @@ const elements = {
     searchBtn: document.querySelector('.search-btn'),
     geoBtn: document.getElementById('geoBtn'),
     joinBtn: document.getElementById('joinBtn'),
+    nextCleanupBtn: document.getElementById('nextCleanupBtn'),
     eventModal: document.getElementById('eventModal'),
     modalBody: document.getElementById('modalBody'),
     joinEventBtn: document.getElementById('joinEventBtn'),
@@ -119,6 +120,11 @@ function attachEventListeners() {
     
     elements.joinBtn?.addEventListener('click', () => {
         alert('Welcome to ShoreSquad! Join us on social media to stay connected.');
+    });
+    
+    // Next cleanup button
+    elements.nextCleanupBtn?.addEventListener('click', () => {
+        alert('🎉 You\'ve registered for the Pasir Ris Youth Squad cleanup!\n\n📍 Location: Street View Asia, Pasir Ris Beach\n📅 Date: Dec 20, 2025 at 11:00 AM\n\nBring gloves, bags, and your friends! ♻️');
     });
     
     // Search functionality
